@@ -14,10 +14,11 @@ function content() {
         return `<p id="words">${words}</p>`;
     }
 
-    const container = document.getElementById('container');
-    container.innerHTML = fTracks() + fWords();
-}
+    const fStatistic = (sentence) => {
+        const popular = popularWord(sentence);
+        return `<p id="statistic">${popular}</p>`;
+    }
 
-function loaderFor(element) {
-    element.innerText = '...';
+    const container = document.getElementById('container');
+    container.innerHTML = fTracks() + fStatistic(words) + fWords();
 }
