@@ -1,6 +1,6 @@
 function onLoad() {
     loaderFor(document.getElementById('container'));
-    setTimeout(content, 2000);
+    setTimeout(content, 1500);
 }
 
 function content() {
