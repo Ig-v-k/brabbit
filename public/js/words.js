@@ -1,5 +1,6 @@
-function popularWord(sentence) {
-    const words = text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").split(" ");
+function counts(text) {
+    const symbols = /[.,\/#!$%\^&\*;:{}=\-_`~()]/g;
+    const words = text.replace(symbols, "").split(" ");
     const counts = {};
     words.forEach(word => {
         word = word.trim();
