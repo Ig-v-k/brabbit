@@ -7,7 +7,7 @@ function content() {
     const pTracks = (array) => {
         const bolds = array.map((el) => `<b>${el}</b>`);
         const joined = bolds.join(' • ');
-        return `<p id="tracks">${joined}</p>`
+        return `<p id="tracks"><b>Tracks:</b> ${joined}</p>`
     }
 
     const pWords = (text) => {
