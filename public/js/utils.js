@@ -9,7 +9,3 @@ function popularWord(sentence) {
     }
     return map;
 }
-
-function loaderFor(element) {
-    element.innerText = '...';
-}

@@ -22,3 +22,7 @@ function content() {
     const container = document.getElementById('container');
     container.innerHTML = fTracks(tracks) + fStatistic(words) + fWords(words);
 }
+
+function loaderFor(element) {
+    element.innerText = '...';
+}
