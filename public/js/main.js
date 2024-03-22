@@ -4,23 +4,23 @@ function onLoad() {
 }
 
 function content() {
-    const fTracks = (array) => {
+    const pTracks = (array) => {
         const bolds = array.map((el) => `<b>${el}</b>`);
         const joined = bolds.join(' • ');
         return `<p id="tracks">${joined}</p>`
     }
 
-    const fWords = (text) => {
+    const pWords = (text) => {
         return `<p id="words">${text}</p>`;
     }
 
-    const fStatistic = (sentence) => {
+    const pStatistic = (sentence) => {
         const popular = popularWord(sentence);
         return `<p id="statistic">${popular}</p>`;
     }
 
     const container = document.getElementById('container');
-    container.innerHTML = fTracks(tracks) + fStatistic(words) + fWords(words);
+    container.innerHTML = pTracks(tracks) + pStatistic(words) + pWords(words);
 }
 
 function loaderFor(element) {
