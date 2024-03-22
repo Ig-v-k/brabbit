@@ -1,11 +1,13 @@
 function popularWord(sentence) {
-    const words = sentence.split(" ");
-    const map = {};
-    for (let i = 0; i < words.length; i++) {
-        const word = words[i];
-        const current = map[word];
-        let count = current ? current : 0;
-        map[word] = count + 1;
-    }
-    return map;
+    const words = text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").split(" ");
+    const counts = {};
+    words.forEach(word => {
+        word = word.trim();
+        if (counts[word]) {
+            counts[word]++;
+        } else {
+            counts[word] = 1;
+        }
+    })
+    return counts;
 }
