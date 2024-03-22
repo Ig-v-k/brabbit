@@ -1,6 +1,7 @@
 function onLoad() {
     loaderFor(document.getElementById('container'));
     setTimeout(content, 1500);
+    lastModification();
 }
 
 function content() {
@@ -45,4 +46,10 @@ function top3Words(text) {
         return ` ${index + 1}. "${word}": ${count} times`;
     });
     return `<span id="top3"><b>Top3 word:</b>${rank}</span>`
+}
+
+function lastModification() {
+    const modification = document.getElementById('modification');
+    const date = new Date(document.lastModified).toLocaleDateString();
+    modification.innerText = `Last modified date ${date}`;
 }
