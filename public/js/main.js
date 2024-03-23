@@ -55,7 +55,7 @@ function content() {
             const [syllable, count] = pair;
             return ` "${syllable}": ${count} times`;
         });
-        return `<span id="syllables"><b>Syllable Count:</b>${format}</span>`;
+        return `<span id="syllables"><b>Syllable:</b>${format}</span>`;
     }
 
     const pStatistic = (sentence) => {
