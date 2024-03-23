@@ -70,7 +70,7 @@ function syllables(text) {
     return counts;
 }
 
-function character(text) {
+function characterCount(text) {
     const array = words(text);
     const counts = {};
     for (const word of array) {
