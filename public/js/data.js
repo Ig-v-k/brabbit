@@ -70,6 +70,16 @@ function syllables(text) {
     return counts;
 }
 
+function character(text) {
+    const array = words(text);
+    const counts = {};
+    for (const word of array) {
+        const count = word.length;
+        counts[count] = (counts[count] || 0) + 1;
+    }
+    return counts;
+}
+
 function words(text) {
     return text.toLowerCase().replace(NOT_WORD, "").trim().split(/\s+/).filter(word => word.trim());
 }
