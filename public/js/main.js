@@ -58,6 +58,17 @@ function content() {
         return `<span id="syllables"><b>Syllable:</b>${format}</span>`;
     }
 
+    function characterCountWords(text) {
+        const counts = characterCount(text);
+        const array = Object.entries(counts);
+        const sorted = sortBy(array, 'desc');
+        const format = sorted.map((pair, index) => {
+            const [character, count] = pair;
+            return ` "${character}": ${count} times`;
+        });
+        return `<span id="character"><b>Charater:</b>${format}</span>`;
+    }
+
     const pStatistic = (sentence) => {
         const stats = [
             uniqueWords(sentence),
@@ -65,6 +76,7 @@ function content() {
             uniqueRatioWords(sentence),
             NWIWords(sentence),
             syllableCountWords(sentence),
+            characterCountWords(sentence),
             top3Words(sentence)
         ].join(' • ');
         return `<p id="statistic">${stats}</p>`;
