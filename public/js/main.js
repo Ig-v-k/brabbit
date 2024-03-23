@@ -11,7 +11,7 @@ function content() {
     }
 
     const pWords = (text) => {
-        return `<i id="text">${text}</i>`;
+        return `<small><i id="text">${text}</i></small>`;
     }
 
     function top3Words(text) {
