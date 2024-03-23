@@ -25,3 +25,7 @@ function unique(text) {
     const unique = new Set(words);
     return unique.size;
 }
+
+function uniqueRatio(text) {
+    return unique(text) / total(text);
+}

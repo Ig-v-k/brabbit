@@ -21,9 +21,9 @@ function content() {
         const top3 = sorted.slice(0, 3);
         const rank = top3.map((wordCount, index) => {
             const [word, count] = wordCount;
-            return `${index + 1}. "${word}": ${count} times`;
+            return ` ${index + 1}. "${word}": ${count} times`;
         });
-        return `<span id="top3"><b>Top3 word:</b> ${rank}</span>`
+        return `<span id="top3"><b>Top3 word:</b>${rank}</span>`
     }
 
     function totalWords(text) {
@@ -36,10 +36,17 @@ function content() {
         return `<span id="unique"><b>Unique:</b> ${count} words</span>`
     }
 
+    function uniqueRatioWords(text) {
+        let ratio = uniqueRatio(text);
+        ratio = ratio.toFixed(2);
+        return `<span id="unique"><b>Unique ratio:</b> ${ratio}%</span>`
+    }
+
     const pStatistic = (sentence) => {
         const stats = [
             uniqueWords(sentence),
             totalWords(sentence),
+            uniqueRatioWords(sentence),
             top3Words(sentence)
         ].join(' • ');
         return `<p id="statistic">${stats}</p>`;
