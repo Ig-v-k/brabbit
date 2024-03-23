@@ -45,7 +45,7 @@ function content() {
     function NWIWords(text) {
         let nwi = NWI(text);
         nwi = nwi.toFixed(2);
-        return `<span id="nwi"><b>NWI:</b> ${nwi}%</span>`
+        return `<span id="nwi"><b>NWI:</b> ${nwi} words</span>`
     }
 
     const pStatistic = (sentence) => {
