@@ -27,12 +27,22 @@ function content() {
     }
 
     function totalWords(text) {
-        const words = total(text);
-        return `<span id="total"><b>Total:</b> ${words} words</span>`
+        const count = total(text);
+        return `<span id="total"><b>Total:</b> ${count} words</span>`
+    }
+
+    function uniqueWords(text) {
+        const count = unique(text);
+        return `<span id="unique"><b>Unique:</b> ${count} words</span>`
     }
 
     const pStatistic = (sentence) => {
-        return `<p id="statistic">${totalWords(sentence)} • ${top3Words(sentence)}</p>`;
+        const stats = [
+            uniqueWords(sentence),
+            totalWords(sentence),
+            top3Words(sentence)
+        ].join(' • ');
+        return `<p id="statistic">${stats}</p>`;
     }
 
     const container = document.getElementById('container');
