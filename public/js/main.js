@@ -48,12 +48,23 @@ function content() {
         return `<span id="nwi"><b>NWI:</b> ${nwi} words</span>`
     }
 
+    function syllableCountWords(text) {
+        const counts = syllables(text);
+        const array = Object.entries(counts);
+        const format = array.map((pair, index) => {
+            const [syllable, count] = pair;
+            return ` ${index + 1}. "${syllable}": ${count} times`;
+        });
+        return `<span id="syllables"><b>Syllable Count:</b>${format}</span>`;
+    }
+
     const pStatistic = (sentence) => {
         const stats = [
             uniqueWords(sentence),
             totalWords(sentence),
             uniqueRatioWords(sentence),
             NWIWords(sentence),
+            syllableCountWords(sentence),
             top3Words(sentence)
         ].join(' • ');
         return `<p id="statistic">${stats}</p>`;

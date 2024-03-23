@@ -48,6 +48,28 @@ function NWI(text) {
     return NWI;
 }
 
+function syllables(text) {
+    const array = words(text);
+    function vowel(word) {
+        let count = 0;
+        let prev = false;
+        for (let char of word) {
+            const isVowel = "aeiouy".includes(char);
+            if (isVowel && !prev) {
+                count++;
+            }
+            prev = isVowel;
+        }
+        return count === 0 ? 1 : count;
+    }
+    const counts = {};
+    for (const word of array) {
+        const count = vowel(word);
+        counts[count] = (counts[count] || 0) + 1;
+    }
+    return counts;
+}
+
 function words(text) {
     return text.toLowerCase().replace(NOT_WORD, "").trim().split(/\s+/).filter(word => word.trim());
 }
