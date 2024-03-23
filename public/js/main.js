@@ -14,8 +14,25 @@ function content() {
         return `<p id="words">${text}</p>`;
     }
 
+    function top3Words(text) {
+        const words = counts(text);
+        const array = Object.entries(words);
+        const sorted = sortBy(array, 'desc');
+        const top3 = sorted.slice(0, 3);
+        const rank = top3.map((wordCount, index) => {
+            const [word, count] = wordCount;
+            return `${index + 1}. "${word}": ${count} times`;
+        });
+        return `<span id="top3"><b>Top3 word:</b> ${rank}</span>`
+    }
+
+    function totalWords(text) {
+        const words = total(text);
+        return `<span id="total"><b>Total:</b> ${words} words</span>`
+    }
+
     const pStatistic = (sentence) => {
-        return `<p id="statistic">${top3Words(sentence)}</p>`;
+        return `<p id="statistic">${totalWords(sentence)} • ${top3Words(sentence)}</p>`;
     }
 
     const container = document.getElementById('container');
@@ -33,18 +50,6 @@ function sortBy(array, order) {
         array.sort((a, b) => b[1] - a[1]);
     }
     return array;
-}
-
-function top3Words(text) {
-    const words = counts(text);
-    const array = Object.entries(words);
-    const sorted = sortBy(array, 'desc');
-    const top3 = sorted.slice(0, 3);
-    const rank = top3.map((wordCount, index) => {
-        const [word, count] = wordCount;
-        return ` ${index + 1}. "${word}": ${count} times`;
-    });
-    return `<span id="top3"><b>Top3 word:</b>${rank}</span>`
 }
 
 function lastModification() {

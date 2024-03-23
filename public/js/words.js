@@ -12,3 +12,9 @@ function counts(text) {
     })
     return counts;
 }
+
+function total(text) {
+    const symbols = /[.,\/#!$%\^&\*;:{}=\-_`~()]/g;
+    const words = text.replace(symbols, "").split(" ").filter(word => word.trim());
+    return words.length;
+}
