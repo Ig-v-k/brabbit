@@ -21,7 +21,7 @@ function content() {
         const top3 = sorted.slice(0, 3);
         const rank = top3.map((wordCount, index) => {
             const [word, count] = wordCount;
-            return ` ${index + 1}. "${word}": ${count} times`;
+            return ` "${word}": ${count} times`;
         });
         return `<span id="top3"><b>Top3 word:</b>${rank}</span>`
     }
@@ -53,7 +53,7 @@ function content() {
         const array = Object.entries(counts);
         const format = array.map((pair, index) => {
             const [syllable, count] = pair;
-            return ` ${index + 1}. "${syllable}": ${count} times`;
+            return ` "${syllable}": ${count} times`;
         });
         return `<span id="syllables"><b>Syllable Count:</b>${format}</span>`;
     }
