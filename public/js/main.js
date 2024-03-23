@@ -11,7 +11,7 @@ function content() {
     }
 
     const pWords = (text) => {
-        return `<i id="words">${text}</i>`;
+        return `<i id="text">${text}</i>`;
     }
 
     function top3Words(text) {
@@ -42,18 +42,25 @@ function content() {
         return `<span id="unique"><b>Unique ratio:</b> ${ratio}%</span>`
     }
 
+    function NWIWords(text) {
+        let nwi = NWI(text);
+        nwi = nwi.toFixed(2);
+        return `<span id="nwi"><b>NWI:</b> ${nwi}%</span>`
+    }
+
     const pStatistic = (sentence) => {
         const stats = [
             uniqueWords(sentence),
             totalWords(sentence),
             uniqueRatioWords(sentence),
+            NWIWords(sentence),
             top3Words(sentence)
         ].join(' • ');
         return `<p id="statistic">${stats}</p>`;
     }
 
     const container = document.getElementById('container');
-    container.innerHTML = pStatistic(words) + pWords(words) + pTracks(tracks);
+    container.innerHTML = pStatistic(data) + pWords(data) + pTracks(tracks);
 }
 
 function loaderFor(element) {
