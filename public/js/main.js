@@ -78,8 +78,12 @@ function content() {
             syllableCountWords(sentence),
             characterCountWords(sentence),
             top3Words(sentence)
-        ].join(' • ');
-        return `<p id="statistic">${stats}</p>`;
+        ];
+        const list = stats.map(stat => {
+            return `<li>${stat}</li>`;
+        });
+        const joined = list.join('');
+        return `<ul id="statistic">${joined}</ul>`;
     }
 
     const container = document.getElementById('container');
