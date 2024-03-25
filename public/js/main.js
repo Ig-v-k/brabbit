@@ -55,7 +55,7 @@ function content() {
             const [syllable, count] = pair;
             return ` "${syllable}": ${count} times`;
         });
-        return `<span id="syllables"><b>Syllable:</b>${format}</span>`;
+        return `<span id="syllables"><b>Syllable<sup><a href="#syllable-ref">[3]</a></sup>:</b>${format}</span>`;
     }
 
     function characterCountWords(text) {
