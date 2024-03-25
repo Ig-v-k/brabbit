@@ -39,13 +39,13 @@ function content() {
     function uniqueRatioWords(text) {
         let ratio = uniqueRatio(text);
         ratio = ratio.toFixed(2);
-        return `<span id="uniqueRatio"><b>Unique ratio<sup><a href="#ratio">[1]</a></sup>:</b> ${ratio}%</span>`
+        return `<span id="uniqueRatio"><b>Unique ratio<sup><a href="#uniqueRatio-ref">[1]</a></sup>:</b> ${ratio}%</span>`
     }
 
     function NWIWords(text) {
         let nwi = NWI(text);
         nwi = nwi.toFixed(2);
-        return `<span id="nwi"><b>NWI:</b> ${nwi} words</span>`
+        return `<span id="nwi"><b>NWI<sup><a href="#nwi-ref">[2]</a></sup>:</b> ${nwi} words</span>`
     }
 
     function syllableCountWords(text) {
