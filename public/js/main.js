@@ -86,8 +86,11 @@ function content() {
         return `<ul id="statistic">${joined}</ul>`;
     }
 
+    const tracks = arrayOf(data, 'track');
+    const words = textOf(arrayOf(data, 'text'));
+
     const container = document.getElementById('container');
-    container.innerHTML = pStatistic(data) + pWords(data) + pTracks(tracks);
+    container.innerHTML = pStatistic(words) + pWords(words) + pTracks(tracks);
 }
 
 function loaderFor(element) {

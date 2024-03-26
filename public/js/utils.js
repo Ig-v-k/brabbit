@@ -83,3 +83,11 @@ function characterCount(text) {
 function words(text) {
     return text.toLowerCase().replace(NOT_WORD, "").trim().split(/\s+/).filter(word => word.trim());
 }
+
+const arrayOf = (obj, key) => {
+    return obj.map(triplet => triplet[key]);
+}
+
+const textOf = (array, separator = ' ') => {
+    return array.join(separator);
+}
