@@ -6,7 +6,7 @@ function onLoad() {
 
 function content() {
     const pTracks = (array) => {
-        const joined = array.join('  •  ');
+        const joined = array.join('&ensp;•&ensp;');
         return `<p id="tracks"><b>Tracks:</b> ${joined}</p>`
     }
 
