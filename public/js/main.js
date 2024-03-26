@@ -1,7 +1,10 @@
+const vrsn = 1.64;
+
 function onLoad() {
     loaderFor(document.getElementById('container'));
     setTimeout(content, 1500);
-    lastModification();
+//    lastModification();
+    version();
 }
 
 function content() {
@@ -110,4 +113,9 @@ function lastModification() {
     const modification = document.getElementById('modification');
     const date = new Date(document.lastModified).toLocaleDateString();
     modification.innerText = `Last modified date ${date}`;
+}
+
+function version() {
+    const versionEl = document.getElementById('version');
+    versionEl.innerText = `v${vrsn}`;
 }
