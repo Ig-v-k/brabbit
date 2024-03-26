@@ -66,7 +66,7 @@ function content() {
             const [character, count] = pair;
             return ` "${character}": ${count} times`;
         });
-        return `<span id="character"><b>Charater:</b>${format}</span>`;
+        return `<span id="character"><b>Charater<sup><a href="#character-ref">[4]</a></sup>:</b>${format}</span>`;
     }
 
     const pStatistic = (sentence) => {
