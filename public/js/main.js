@@ -10,7 +10,7 @@ function onLoad() {
 function content() {
     const pTracks = (array) => {
         const joined = array.join('&ensp;•&ensp;');
-        return `<p id="tracks"><b>Tracks:</b> ${joined}</p>`
+        return `<p id="tracks"><b>Tracks (${array.length}):</b> ${joined}</p>`
     }
 
     const pWords = (text) => {
