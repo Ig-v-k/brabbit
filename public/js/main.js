@@ -72,6 +72,21 @@ function content() {
         return `<span id="character"><b>Charater<sup><a href="#character-ref">[4]</a></sup>:</b>${format}</span>`;
     }
 
+    function top3PosWords(tags) {
+        const minCount = 2;
+        const posCounts = tags.reduce((acc, { tag }) => {
+            acc[tag] = (acc[tag] || 0) + 1;
+            return acc;
+        }, {});
+        const filteredPosCounts = Object.entries(posCounts).filter(([tag, count]) => count >= minCount);
+        filteredPosCounts.sort((a, b) => b[1] - a[1]);
+        const top3PosTags = filteredPosCounts.slice(0, 3);
+        const format = top3PosTags.map(([tag, count]) => {
+            return ` "${tag}": ${count} times`;
+        });
+        return `<span id="pos"><b>POS<sup><a href="#pos-ref">[5]</a></sup>:</b>${format}</span>`;
+    }
+
     const pStatistic = (sentence) => {
         const stats = [
             uniqueWords(sentence),
@@ -80,6 +95,7 @@ function content() {
             NWIWords(sentence),
             syllableCountWords(sentence),
             characterCountWords(sentence),
+            top3PosWords(pos(sentence)),
             top3Words(sentence)
         ];
         const list = stats.map(stat => {

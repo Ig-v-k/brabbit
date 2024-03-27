@@ -91,3 +91,29 @@ const arrayOf = (obj, key) => {
 const textOf = (array, separator = ' ') => {
     return array.join(separator);
 }
+
+function pos(text) {
+    const array = words(text);
+    const articles = ["a", "an", "the"];
+    const prepositions = ["in", "on", "at", "to", "from", "by", "with", "as"];
+    const conjunctions = ["and", "but", "or", "nor", "for", "so", "yet"];
+    const pronouns = ["i", "me", "my", "mine", "you", "your", "yours", "he", "him", "his", "she", "her", "hers", "it", "its", "we", "us", "our", "ours", "they", "them", "their", "theirs", "who", "what", "which", "that"];
+    const verbs = ["be", "have", "do", "say", "get", "make", "go", "know", "take", "come", "see", "can", "will", "think", "look", "want", "like", "give", "use", "find", "tell", "work", "call", "move", "other"];
+    const tags = [];
+    for (const word of array) {
+        if (articles.includes(word)) {
+            tags.push({ word, tag: "article" });
+        } else if (prepositions.includes(word)) {
+            tags.push({ word, tag: "preposition" });
+        } else if (conjunctions.includes(word)) {
+            tags.push({ word, tag: "conjunction" });
+        } else if (pronouns.includes(word)) {
+            tags.push({ word, tag: "pronoun" });
+        } else if (verbs.includes(word)) {
+            tags.push({ word, tag: "verb" });
+        } else {
+            tags.push({ word, tag: "noun" });
+        }
+    }
+    return tags;
+}
