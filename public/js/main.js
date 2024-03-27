@@ -1,7 +1,7 @@
 const vrsn = 1.68;
 
 function onLoad() {
-    loaderFor(document.getElementById('container'));
+//    loaderFor(document.getElementById('container'));
     setTimeout(content, 1500);
 //    lastModification();
     version();
@@ -31,7 +31,8 @@ function content() {
 
     function totalWords(text) {
         const count = total(text);
-        return `<span id="total"><b>Total:</b> ${count} words</span>`
+        const t = document.getElementById('total');
+        t.innerHtml = `<b>Total</b>: ${count} words`;
     }
 
     function uniqueWords(text) {
@@ -114,6 +115,14 @@ function content() {
 
 function loaderFor(element) {
     element.innerText = '...';
+}
+
+function hide(element) {
+    element.style.display = "none";
+}
+
+function show(element) {
+    element.style.display = "block";
 }
 
 function sortBy(array, order) {
