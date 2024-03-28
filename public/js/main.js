@@ -10,11 +10,13 @@ function onLoad() {
 function content() {
     const pTracks = (array) => {
         const joined = array.join('&ensp;•&ensp;');
-        return `<p id="tracks"><b>Tracks (${array.length}):</b> ${joined}</p>`
+        const t = document.getElementById('tracks');
+        t.innerHTML = `<b>Tracks (${array.length}):</b> ${joined}`;
     }
 
     const pWords = (text) => {
-        return `<small><i id="text">${text}</i></small>`;
+        const t = document.getElementById('text');
+        t.innerText = text;
     }
 
     function top3Words(text) {
@@ -26,30 +28,34 @@ function content() {
             const [word, count] = wordCount;
             return ` "${word}": ${count} times`;
         });
-        return `<span id="top3"><b>Top3 word:</b>${rank}</span>`
+        const t = document.getElementById('top3');
+        t.innerHTML = `<b>Top3 word:</b>${rank}</span>`;
     }
 
     function totalWords(text) {
         const count = total(text);
         const t = document.getElementById('total');
-        t.innerHtml = `<b>Total</b>: ${count} words`;
+        t.innerHTML = `<b>Total</b>: ${count} words`;
     }
 
     function uniqueWords(text) {
         const count = unique(text);
-        return `<span id="unique"><b>Unique:</b> ${count} words</span>`
+        const t = document.getElementById('unique');
+        t.innerHTML = `<b>Unique:</b> ${count} words`;
     }
 
     function uniqueRatioWords(text) {
         let ratio = uniqueRatio(text);
         ratio = ratio.toFixed(2);
-        return `<span id="uniqueRatio"><b>Unique ratio<sup><a href="#uniqueRatio-ref">[1]</a></sup>:</b> ${ratio}%</span>`
+        const t = document.getElementById('uniqueRatio');
+        t.innerHTML = `<b>Unique ratio<sup><a href="#uniqueRatio-ref">[1]</a></sup>:</b> ${ratio}%`;
     }
 
     function NWIWords(text) {
         let nwi = NWI(text);
         nwi = nwi.toFixed(2);
-        return `<span id="nwi"><b>NWI<sup><a href="#nwi-ref">[2]</a></sup>:</b> ${nwi} words</span>`
+        const t = document.getElementById('nwi');
+        t.innerHTML = `<b>NWI<sup><a href="#nwi-ref">[2]</a></sup>:</b> ${nwi} words`;
     }
 
     function syllableCountWords(text) {
@@ -59,7 +65,8 @@ function content() {
             const [syllable, count] = pair;
             return ` "${syllable}": ${count} times`;
         });
-        return `<span id="syllables"><b>Syllable<sup><a href="#syllable-ref">[3]</a></sup>:</b>${format}</span>`;
+        const t = document.getElementById('syllables');
+        t.innerHTML = `<b>Syllable<sup><a href="#syllable-ref">[3]</a></sup>:</b>${format}`;
     }
 
     function characterCountWords(text) {
@@ -70,7 +77,8 @@ function content() {
             const [character, count] = pair;
             return ` "${character}": ${count} times`;
         });
-        return `<span id="character"><b>Charater<sup><a href="#character-ref">[4]</a></sup>:</b>${format}</span>`;
+        const t = document.getElementById('character');
+        t.innerHTML = `<b>Charater<sup><a href="#character-ref">[4]</a></sup>:</b>${format}`;
     }
 
     function top3PosWords(tags) {
@@ -85,32 +93,27 @@ function content() {
         const format = top3PosTags.map(([tag, count]) => {
             return ` "${tag}": ${count} times`;
         });
-        return `<span id="pos"><b>POS<sup><a href="#pos-ref">[5]</a></sup>:</b>${format}</span>`;
+        const t = document.getElementById('pos');
+        t.innerHTML = `<b>POS<sup><a href="#pos-ref">[5]</a></sup>:</b>${format}`;
     }
 
     const pStatistic = (sentence) => {
-        const stats = [
-            uniqueWords(sentence),
-            totalWords(sentence),
-            uniqueRatioWords(sentence),
-            NWIWords(sentence),
-            syllableCountWords(sentence),
-            characterCountWords(sentence),
-            top3PosWords(pos(sentence)),
-            top3Words(sentence)
-        ];
-        const list = stats.map(stat => {
-            return `<li>${stat}</li>`;
-        });
-        const joined = list.join('');
-        return `<ul id="statistic">${joined}</ul>`;
+        uniqueWords(sentence);
+        totalWords(sentence);
+        uniqueRatioWords(sentence);
+        NWIWords(sentence);
+        syllableCountWords(sentence);
+        characterCountWords(sentence);
+        top3PosWords(pos(sentence));
+        top3Words(sentence);
     }
 
     const tracks = arrayOf(data, 'track');
     const words = textOf(arrayOf(data, 'text'));
 
-    const container = document.getElementById('container');
-    container.innerHTML = pStatistic(words) + pWords(words) + pTracks(tracks);
+    pStatistic(words);
+    pWords(words);
+    pTracks(tracks);
 }
 
 function loaderFor(element) {
