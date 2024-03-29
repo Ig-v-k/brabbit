@@ -28,33 +28,33 @@ function content() {
             const [word, count] = wordCount;
             return ` "${word}": ${count} times`;
         });
-        const t = document.getElementById('top3');
-        t.innerHTML = `${rank}</span>`;
+        const t = document.getElementById('top3-val');
+        t.innerHTML = `${rank}`;
     }
 
     function totalWords(text) {
         const count = total(text);
-        const t = document.getElementById('total');
+        const t = document.getElementById('total-val');
         t.innerHTML = `${count} words`;
     }
 
     function uniqueWords(text) {
         const count = unique(text);
-        const t = document.getElementById('unique');
+        const t = document.getElementById('unique-val');
         t.innerHTML = `${count} words`;
     }
 
     function uniqueRatioWords(text) {
         let ratio = uniqueRatio(text);
         ratio = ratio.toFixed(2);
-        const t = document.getElementById('uniqueRatio');
+        const t = document.getElementById('uniqueRatio-val');
         t.innerHTML = `${ratio}%`;
     }
 
     function NWIWords(text) {
         let nwi = NWI(text);
         nwi = nwi.toFixed(2);
-        const t = document.getElementById('nwi');
+        const t = document.getElementById('nwi-val');
         t.innerHTML = `${nwi} words`;
     }
 
@@ -65,7 +65,7 @@ function content() {
             const [syllable, count] = pair;
             return ` "${syllable}": ${count} times`;
         });
-        const t = document.getElementById('syllables');
+        const t = document.getElementById('syllables-val');
         t.innerHTML = format;
     }
 
@@ -77,7 +77,7 @@ function content() {
             const [character, count] = pair;
             return ` "${character}": ${count} times`;
         });
-        const t = document.getElementById('character');
+        const t = document.getElementById('character-val');
         t.innerHTML = format;
     }
 
@@ -93,7 +93,7 @@ function content() {
         const format = top3PosTags.map(([tag, count]) => {
             return ` "${tag}": ${count} times`;
         });
-        const t = document.getElementById('pos');
+        const t = document.getElementById('pos-val');
         t.innerHTML = format;
     }
 
