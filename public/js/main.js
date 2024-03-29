@@ -29,33 +29,33 @@ function content() {
             return ` "${word}": ${count} times`;
         });
         const t = document.getElementById('top3');
-        t.innerHTML = `<b>Top3 word:</b>${rank}</span>`;
+        t.innerHTML = `${rank}</span>`;
     }
 
     function totalWords(text) {
         const count = total(text);
         const t = document.getElementById('total');
-        t.innerHTML = `<b>Total</b>: ${count} words`;
+        t.innerHTML = `${count} words`;
     }
 
     function uniqueWords(text) {
         const count = unique(text);
         const t = document.getElementById('unique');
-        t.innerHTML = `<b>Unique:</b> ${count} words`;
+        t.innerHTML = `${count} words`;
     }
 
     function uniqueRatioWords(text) {
         let ratio = uniqueRatio(text);
         ratio = ratio.toFixed(2);
         const t = document.getElementById('uniqueRatio');
-        t.innerHTML = `<b>Unique ratio<sup><a href="#uniqueRatio-ref">[1]</a></sup>:</b> ${ratio}%`;
+        t.innerHTML = `${ratio}%`;
     }
 
     function NWIWords(text) {
         let nwi = NWI(text);
         nwi = nwi.toFixed(2);
         const t = document.getElementById('nwi');
-        t.innerHTML = `<b>NWI<sup><a href="#nwi-ref">[2]</a></sup>:</b> ${nwi} words`;
+        t.innerHTML = `${nwi} words`;
     }
 
     function syllableCountWords(text) {
@@ -66,7 +66,7 @@ function content() {
             return ` "${syllable}": ${count} times`;
         });
         const t = document.getElementById('syllables');
-        t.innerHTML = `<b>Syllable<sup><a href="#syllable-ref">[3]</a></sup>:</b>${format}`;
+        t.innerHTML = format;
     }
 
     function characterCountWords(text) {
@@ -78,7 +78,7 @@ function content() {
             return ` "${character}": ${count} times`;
         });
         const t = document.getElementById('character');
-        t.innerHTML = `<b>Charater<sup><a href="#character-ref">[4]</a></sup>:</b>${format}`;
+        t.innerHTML = format;
     }
 
     function top3PosWords(tags) {
@@ -94,7 +94,7 @@ function content() {
             return ` "${tag}": ${count} times`;
         });
         const t = document.getElementById('pos');
-        t.innerHTML = `<b>POS<sup><a href="#pos-ref">[5]</a></sup>:</b>${format}`;
+        t.innerHTML = format;
     }
 
     const pStatistic = (sentence) => {
