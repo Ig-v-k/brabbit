@@ -147,3 +147,10 @@ function version() {
     const versionEl = document.getElementById('version');
     versionEl.innerText = `v${vrsn}`;
 }
+
+function mixWords() {
+    const text = document.getElementById('text');
+    const innerText = text.innerText;
+    const mixed = mix(innerText);
+    text.innerText = mixed;
+}
