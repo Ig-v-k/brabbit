@@ -1,4 +1,4 @@
-const vrsn = 1.76;
+const vrsn = 1.77;
 
 function onLoad() {
 //    loaderFor(document.getElementById('container'));
