@@ -48,6 +48,30 @@ function NWI(text) {
     return NWI;
 }
 
+function NWIPeriods(songs) {
+    const nwiPeriods = [];
+    for (const song of songs) {
+        const nwi = NWI(song.text);
+        const year = yearOf(song.date);
+        nwiPeriods.push({ year: year, nwi });
+    }
+    return nwiPeriods;
+}
+
+function NWIDecreased(songs) {
+    const periods = NWIPeriods(songs);
+    periods.sort((a, b) => a.year - b.year);
+    let decreased = false;
+    let prev = Infinity;
+    for (const period of periods) {
+        if (period.nwi < prev) {
+            decreased = true;
+        }
+        prev = period.nwi;
+    }
+    return decreased;
+}
+
 function syllables(text) {
     const array = words(text);
     function vowel(word) {
@@ -125,4 +149,13 @@ function mix(text) {
         [array[i], array[j]] = [array[j], array[i]];
     }
     return array.join(' ');
+}
+
+function yearOf(date) {
+    const parts = date.split('.');
+    if (parts.length >= 3) {
+        return parseInt(parts[2], 10);
+    } else {
+        return '';
+    }
 }
