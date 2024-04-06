@@ -58,7 +58,7 @@ function NWIPeriods(songs) {
     return nwiPeriods;
 }
 
-function NWIDecreased(songs) {
+function evolution(songs) {
     const periods = NWIPeriods(songs);
     periods.sort((a, b) => a.year - b.year);
     let decreased = false;

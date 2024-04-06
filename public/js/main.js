@@ -1,4 +1,4 @@
-const vrsn = 1.77;
+const vrsn = 1.81;
 
 function onLoad() {
 //    loaderFor(document.getElementById('container'));
@@ -58,6 +58,12 @@ function content() {
         t.innerHTML = `${nwi} words`;
     }
 
+    function evolutionWords(songs) {
+        const evol = evolution(songs);
+        const t = document.getElementById('evolution-val');
+        t.innerHTML = evol ? "decreased" : "consistent";
+    }
+
     function syllableCountWords(text) {
         const counts = syllables(text);
         const array = Object.entries(counts);
@@ -110,6 +116,8 @@ function content() {
 
     const tracks = arrayOf(data, 'track');
     const words = textOf(arrayOf(data, 'text'));
+
+    evolutionWords(data);
 
     pStatistic(words);
     pWords(words);
