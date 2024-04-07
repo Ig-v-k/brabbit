@@ -1,7 +1,7 @@
 const NOT_WORD = /[^a-zA-Z\s]/g;
 
 function counts(text) {
-    const filtered = words(text);
+    const filtered = wordsOf(text);
     const counts = {};
     filtered.forEach(word => {
         word = word.trim();
@@ -15,12 +15,12 @@ function counts(text) {
 }
 
 function total(text) {
-    const filtered = words(text);
+    const filtered = wordsOf(text);
     return filtered.length;
 }
 
 function unique(text) {
-    const array = words(text);
+    const array = wordsOf(text);
     const unique = new Set(array);
     return unique.size;
 }
@@ -30,22 +30,28 @@ function uniqueRatio(text) {
 }
 
 function NWI(text) {
-    const array = words(text);
-    const uniques = new Set();
+    const words = wordsOf(text);
+    const indices = {};
+    const counts = {};
     let interval = 0;
-    let total = 0;
-    for (let i = 0; i < array.length; i++) {
-        const word = array[i];
-        if (!uniques.has(word)) {
-            uniques.add(word);
-            total++;
-            if (total > 1) {
-                interval += i;
-            }
+    let uniques = 0;
+    words.forEach((word, index) => {
+        if (!(word in indices)) {
+            indices[word] = index;
+            counts[word] = 1;
+            uniques++;
+        } else {
+            interval += index - indices[word];
+            indices[word] = index;
+            counts[word]++;
         }
-    }
-    const NWI = total > 1 ? interval / (total - 1) : 0;
-    return NWI;
+    });
+    let nwi = 0;
+    Object.values(counts).forEach(count => {
+        nwi += count - 1;
+    });
+    const average = interval / nwi;
+    return average;
 }
 
 function NWIPeriods(songs) {
@@ -73,7 +79,7 @@ function evolution(songs) {
 }
 
 function syllables(text) {
-    const array = words(text);
+    const array = wordsOf(text);
     function vowel(word) {
         let count = 0;
         let prev = false;
@@ -95,7 +101,7 @@ function syllables(text) {
 }
 
 function characterCount(text) {
-    const array = words(text);
+    const array = wordsOf(text);
     const counts = {};
     for (const word of array) {
         const count = word.length;
@@ -104,7 +110,7 @@ function characterCount(text) {
     return counts;
 }
 
-function words(text) {
+function wordsOf(text) {
     return text.toLowerCase().replace(NOT_WORD, "").trim().split(/\s+/).filter(word => word.trim());
 }
 
@@ -117,7 +123,7 @@ const textOf = (array, separator = ' ') => {
 }
 
 function pos(text) {
-    const array = words(text);
+    const array = wordsOf(text);
     const articles = ["a", "an", "the"];
     const prepositions = ["in", "on", "at", "to", "from", "by", "with", "as"];
     const conjunctions = ["and", "but", "or", "nor", "for", "so", "yet"];
@@ -143,7 +149,7 @@ function pos(text) {
 }
 
 function mix(text) {
-    const array = words(text);
+    const array = wordsOf(text);
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
