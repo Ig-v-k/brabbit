@@ -1,3 +1,4 @@
+![Logo!](/public/logo/logo64.png "brabbit")
 # brabbit
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/b41e123463c5241a13ae/maintainability)](https://codeclimate.com/github/Ig-v-k/brabbit/maintainability)
