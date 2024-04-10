@@ -167,3 +167,22 @@ function openDialogBy(id) {
     const dialog = document.getElementById(id);
     dialog.showModal();
 }
+
+function rhymeStats(tracks) {
+    const stats = {};
+    let lyrics = arrayOf(tracks, 'text');
+    for (const line of lyrics) {
+        const words = wordsOf(line);
+        const beats = rhymes(words);
+        for (const group in beats) {
+            if (beats[group].length > 1) {
+                const pattern = `${group.repeat(beats[group].length)}`;
+                if (!stats[pattern]) {
+                    stats[pattern] = 0;
+                }
+                stats[pattern]++;
+            }
+        }
+    }
+    return stats;
+}
