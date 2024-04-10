@@ -115,7 +115,11 @@ function wordsOf(text) {
 }
 
 const arrayOf = (obj, key) => {
-    return obj.map(triplet => triplet[key]);
+    return obj.map(group => group[key]);
+}
+
+const array2dOf = (obj, first, second) => {
+    return obj.map(group => [group[first], group[second]]);
 }
 
 const textOf = (array, separator = ' ') => {
