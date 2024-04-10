@@ -165,3 +165,16 @@ function yearOf(date) {
         return '';
     }
 }
+
+function rhymes(words, slice = -2) {
+    const rhymes = {};
+    for (let i = 0; i < words.length; i++) {
+        const word = words[i].toLowerCase().replace(/[^a-z]+$/, "");
+        const sliced = word.slice(slice);
+        if (!rhymes[sliced]) {
+            rhymes[sliced] = [];
+        }
+        rhymes[sliced].push(word);
+    }
+    return rhymes;
+}
