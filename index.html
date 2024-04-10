@@ -45,6 +45,15 @@
             </ul>
             <div>
                 <button onclick="mixWords();">Mix</button>
+                <div>
+                    <dialog id="findWordDialog">
+                      <p>Please press <kbd>Ctrl</kbd> + <kbd>F</kbd> and type word.</p>
+                      <form method="dialog">
+                        <button>OK</button>
+                      </form>
+                    </dialog>
+                    <button onClick="openDialog('findWordDialog');">Find word</button>
+                </div>
             </div>
             <small><i id="text">load...</i></small>
             <p id="tracks">load...</p>
