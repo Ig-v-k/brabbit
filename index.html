@@ -17,6 +17,13 @@
     <script src="public/data.js"></script>
 </head>
 <body onload="onLoad()">
+    <dialog id="findWordDialog">
+        <p>Please press <kbd>Ctrl</kbd> + <kbd>F</kbd> and type word.</p>
+        <form method="dialog">
+            <button>OK</button>
+        </form>
+    </dialog>
+
     <header>
         <img src="public/logo/logo32.png" alt="Logo">
         <p><b>brabbit</b> - Statistics of words in Eminem songs</p>
@@ -45,15 +52,7 @@
             </ul>
             <div>
                 <button onclick="mixWords();">Mix</button>
-                <div>
-                    <dialog id="findWordDialog">
-                      <p>Please press <kbd>Ctrl</kbd> + <kbd>F</kbd> and type word.</p>
-                      <form method="dialog">
-                        <button>OK</button>
-                      </form>
-                    </dialog>
-                    <button onClick="openDialogBy('findWordDialog');">Find word</button>
-                </div>
+                <button onClick="openDialogBy('findWordDialog');">Find word</button>
             </div>
             <small><i id="text">load...</i></small>
             <p id="tracks">load...</p>
