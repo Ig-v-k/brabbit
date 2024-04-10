@@ -162,3 +162,8 @@ function mixWords() {
     const mixed = mix(innerText);
     text.innerText = mixed;
 }
+
+function openDialogBy(id) {
+    const dialog = document.getElementById(id);
+    dialog.showModal();
+}
