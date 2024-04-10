@@ -168,7 +168,7 @@ function openDialogBy(id) {
     dialog.showModal();
 }
 
-function rhymeStats(tracks) {
+function trackRhymes(tracks) {
     const stats = {};
     let lyrics = arrayOf(tracks, 'text');
     for (const line of lyrics) {
