@@ -1,3 +1,109 @@
+:root {
+    --bg: #fdfdfc;
+    --fg: #1d1d1f;
+    --muted: #6b6b70;
+    --line: #dcdcdf;
+    --accent: #0b5cad;
+    --row: #f2f2f4;
+    color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #161618;
+        --fg: #e8e8ea;
+        --muted: #9a9aa1;
+        --line: #38383d;
+        --accent: #7ab4f5;
+        --row: #222226;
+    }
+}
+
+body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.5;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 16px 32px;
+}
+
+a {
+    color: var(--accent);
+}
+
+header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 12px;
+}
+
+header h1 {
+    flex-basis: 100%;
+    margin: 0 0 8px;
+}
+
+#summary {
+    font-size: 1.1em;
+    border-left: 3px solid var(--accent);
+    padding-left: 12px;
+}
+
+#statistic {
+    padding-left: 20px;
+}
+
+#statistic li {
+    margin: 4px 0;
+}
+
+#references,
+footer,
+#tracks {
+    color: var(--muted);
+}
+
+.table-wrap {
+    overflow-x: auto;
+    margin-bottom: 16px;
+}
+
+#tracks-table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.9em;
+    font-variant-numeric: tabular-nums;
+}
+
+#tracks-table th,
+#tracks-table td {
+    border-bottom: 1px solid var(--line);
+    padding: 4px 8px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+#tracks-table th:nth-child(-n+2),
+#tracks-table td:nth-child(-n+2) {
+    text-align: left;
+}
+
+#tracks-table tbody tr:hover {
+    background: var(--row);
+}
+
+#tracks-table th button {
+    all: unset;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+#tracks-table th button:focus-visible {
+    outline: 2px solid var(--accent);
+}
+
 kbd {
     background-color: #eee;
     border-radius: 3px;

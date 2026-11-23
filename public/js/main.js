@@ -1,186 +1,235 @@
-const vrsn = 1.81;
+const vrsn = '2.0';
+const ALL = '';
+
+document.addEventListener('DOMContentLoaded', onLoad);
 
 function onLoad() {
-//    loaderFor(document.getElementById('container'));
-    setTimeout(content, 1500);
-//    lastModification();
     version();
+    albumSelect(data);
+    content(data);
 }
 
-function content() {
-    const pTracks = (array) => {
-        const joined = array.join('&ensp;•&ensp;');
-        const t = document.getElementById('tracks');
-        t.innerHTML = `<b>Tracks (${array.length}):</b> ${joined}`;
+const byId = (id) => document.getElementById(id);
+const num = (value, digits = 0) => value.toLocaleString('en-US', {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits
+});
+const pct = (value, digits = 1) => `${num(value * 100, digits)}%`;
+const setText = (id, text) => byId(id).textContent = text;
+const ranked = (pairs, suffix = 'times') => pairs.map(([key, count]) => `"${key}": ${num(count)} ${suffix}`).join(', ');
+
+/** Percentage distribution like `1: 79.4%, 2: 17.0%, ...` (only buckets with at least `min` share). */
+function distribution(counts, min = 0.005) {
+    const all = Object.values(counts).reduce((s, c) => s + c, 0);
+    return Object.entries(counts)
+        .sort((a, b) => Number(a[0]) - Number(b[0]))
+        .filter(([, count]) => count / all >= min)
+        .map(([key, count]) => `${key}: ${pct(count / all)}`)
+        .join(', ');
+}
+
+function albumSelect(songs) {
+    const select = byId('album');
+    const albums = [...new Set(arrayOf(songs, 'album'))]
+        .map(album => ({album, year: Math.min(...songs.filter(s => s.album === album).map(s => yearOf(s.date)))}))
+        .sort((a, b) => a.year - b.year);
+    for (const {album, year} of albums) {
+        const count = songs.filter(s => s.album === album).length;
+        select.add(new Option(`${album} (${year}, ${count} ${count === 1 ? 'track' : 'tracks'})`, album));
+    }
+    select.addEventListener('change', () => {
+        const value = select.value;
+        content(value === ALL ? songs : songs.filter(s => s.album === value));
+    });
+}
+
+function content(songs) {
+    const words = textOf(arrayOf(songs, 'text'));
+
+    const uniqueWords = () => setText('unique-val', `${num(unique(words))} words`);
+    const totalWords = () => setText('total-val', `${num(total(words))} words`);
+    const uniqueRatioWords = () => setText('uniqueRatio-val', pct(uniqueRatio(words), 2));
+    const mattrWords = () => setText('mattr-val', pct(MATTR(words), 2));
+    const NWIWords = () => setText('nwi-val', `a new word every ${num(NWI(words), 2)} words`);
+    const repeatWords = () => setText('repeat-val', `a word returns after ${num(repeatInterval(words), 0)} words on average`);
+
+    function hapaxWords() {
+        const {count, share} = hapax(words);
+        setText('hapax-val', `${num(count)} words (${pct(share)} of vocabulary) used only once`);
     }
 
-    const pWords = (text) => {
-        const t = document.getElementById('text');
-        t.innerText = text;
-    }
-
-    function top3Words(text) {
-        const words = counts(text);
-        const array = Object.entries(words);
-        const sorted = sortBy(array, 'desc');
-        const top3 = sorted.slice(0, 3);
-        const rank = top3.map((wordCount, index) => {
-            const [word, count] = wordCount;
-            return ` "${word}": ${count} times`;
-        });
-        const t = document.getElementById('top3-val');
-        t.innerHTML = `${rank}`;
-    }
-
-    function totalWords(text) {
-        const count = total(text);
-        const t = document.getElementById('total-val');
-        t.innerHTML = `${count} words`;
-    }
-
-    function uniqueWords(text) {
-        const count = unique(text);
-        const t = document.getElementById('unique-val');
-        t.innerHTML = `${count} words`;
-    }
-
-    function uniqueRatioWords(text) {
-        let ratio = uniqueRatio(text);
-        ratio = ratio.toFixed(2);
-        const t = document.getElementById('uniqueRatio-val');
-        t.innerHTML = `${ratio}%`;
-    }
-
-    function NWIWords(text) {
-        let nwi = NWI(text);
-        nwi = nwi.toFixed(2);
-        const t = document.getElementById('nwi-val');
-        t.innerHTML = `${nwi} words`;
-    }
-
-    function evolutionWords(songs) {
+    function evolutionWords() {
         const evol = evolution(songs);
-        const t = document.getElementById('evolution-val');
-        t.innerHTML = evol ? "decreased" : "consistent";
+        if (evol.trend === 'n/a') {
+            const years = evol.periods.map(p => p.year).join(', ');
+            setText('evolution-val', `n/a, selection covers a single year (${years})`);
+            return;
+        }
+        const sign = evol.perDecade > 0 ? '+' : '';
+        const periods = evol.periods.map(p => `${p.year}: ${pct(p.mattr)}`).join(' · ');
+        setText('evolution-val',
+            `${evol.trend} (${sign}${num(evol.perDecade * 100, 1)} pp of MATTR per decade, r = ${num(evol.r, 2)}). ${periods}`);
     }
 
-    function syllableCountWords(text) {
-        const counts = syllables(text);
-        const array = Object.entries(counts);
-        const format = array.map((pair, index) => {
-            const [syllable, count] = pair;
-            return ` "${syllable}": ${count} times`;
+    function syllableCountWords() {
+        const counts = syllables(words);
+        setText('syllables-val', `avg ${num(averageOf(counts), 2)} per word. ${distribution(counts)}`);
+    }
+
+    function characterCountWords() {
+        const counts = characterCount(words);
+        setText('character-val', `avg ${num(averageOf(counts), 2)} letters per word. ${distribution(counts, 0.01)}`);
+    }
+
+    function posWords() {
+        const tags = pos(words);
+        const posCounts = {};
+        for (const {tag} of tags) {
+            posCounts[tag] = (posCounts[tag] || 0) + 1;
+        }
+        const format = sortBy(Object.entries(posCounts), 'desc')
+            .map(([tag, count]) => `${tag}: ${pct(count / tags.length)}`)
+            .join(', ');
+        setText('pos-val', format);
+    }
+
+    const lexicalWords = () => setText('lexical-val', `${pct(lexicalDensity(words))} content words`);
+
+    function pronounWords() {
+        const {i, you, ratio} = pronounFocus(words);
+        const times = Number.isFinite(ratio) ? `${num(ratio, 2)}×` : '∞';
+        setText('pronoun-val', `"I" ${num(i)} vs "you" ${num(you)}, ratio ${times}`);
+    }
+
+    const top3 = () => setText('top3-val', ranked(topWords(words, 3)));
+    const top5Content = () => setText('top5content-val', ranked(topWords(words, 5, true)));
+
+    function summary() {
+        const stats = songs.map(trackStats).sort((a, b) => b.mattr - a.mattr);
+        const richest = stats[0];
+        const poorest = stats[stats.length - 1];
+        const {share} = hapax(words);
+        const {ratio} = pronounFocus(words);
+        let text = `${songs.length} ${songs.length === 1 ? 'track' : 'tracks'}, ${num(total(words))} words. ` +
+            `A new word appears every ${num(NWI(words), 1)} words and ${pct(share, 0)} of the vocabulary is used only once. `;
+        if (Number.isFinite(ratio)) {
+            text += `"I" is said ${num(ratio, 1)}× more often than "you". `;
+        }
+        if (stats.length > 1) {
+            text += `Richest vocabulary: "${richest.track}" (MATTR ${pct(richest.mattr)}), ` +
+                `most repetitive: "${poorest.track}" (${pct(poorest.mattr)}).`;
+        }
+        setText('summary', text);
+    }
+
+    const pWords = () => setText('text', words);
+
+    function pTracks() {
+        const t = byId('tracks');
+        t.replaceChildren();
+        const title = document.createElement('b');
+        title.textContent = `Tracks (${songs.length}): `;
+        t.append(title, arrayOf(songs, 'track').join(' • '));
+    }
+
+    uniqueWords();
+    totalWords();
+    uniqueRatioWords();
+    mattrWords();
+    NWIWords();
+    repeatWords();
+    hapaxWords();
+    evolutionWords();
+    syllableCountWords();
+    characterCountWords();
+    posWords();
+    lexicalWords();
+    pronounWords();
+    top3();
+    top5Content();
+    summary();
+    tracksTable(songs);
+    pWords();
+    pTracks();
+}
+
+const tableState = {key: 'mattr', desc: true};
+
+function tracksTable(songs) {
+    const columns = [
+        ['track', 'Track', s => s.track],
+        ['album', 'Album', s => s.album],
+        ['year', 'Year', s => s.year],
+        ['total', 'Words', s => num(s.total)],
+        ['unique', 'Unique', s => num(s.unique)],
+        ['ratio', 'Unique ratio', s => pct(s.ratio)],
+        ['mattr', 'MATTR', s => pct(s.mattr)],
+    ];
+    const stats = songs.map(trackStats);
+    const table = byId('tracks-table');
+
+    function draw() {
+        const {key, desc} = tableState;
+        stats.sort((a, b) => {
+            const cmp = typeof a[key] === 'string' ? a[key].localeCompare(b[key]) : a[key] - b[key];
+            return desc ? -cmp : cmp;
         });
-        const t = document.getElementById('syllables-val');
-        t.innerHTML = format;
-    }
-
-    function characterCountWords(text) {
-        const counts = characterCount(text);
-        const array = Object.entries(counts);
-        const sorted = sortBy(array, 'desc');
-        const format = sorted.map((pair, index) => {
-            const [character, count] = pair;
-            return ` "${character}": ${count} times`;
+        const head = document.createElement('tr');
+        for (const [colKey, label] of columns) {
+            const th = document.createElement('th');
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = label + (colKey === key ? (desc ? ' ▼' : ' ▲') : '');
+            button.addEventListener('click', () => {
+                tableState.desc = tableState.key === colKey ? !tableState.desc : typeof stats[0][colKey] !== 'string';
+                tableState.key = colKey;
+                draw();
+            });
+            th.setAttribute('aria-sort', colKey === key ? (desc ? 'descending' : 'ascending') : 'none');
+            th.append(button);
+            head.append(th);
+        }
+        const rows = stats.map(s => {
+            const tr = document.createElement('tr');
+            for (const [, , value] of columns) {
+                const td = document.createElement('td');
+                td.textContent = value(s);
+                tr.append(td);
+            }
+            return tr;
         });
-        const t = document.getElementById('character-val');
-        t.innerHTML = format;
+        const thead = document.createElement('thead');
+        const tbody = document.createElement('tbody');
+        thead.append(head);
+        tbody.append(...rows);
+        table.replaceChildren(thead, tbody);
     }
 
-    function top3PosWords(tags) {
-        const minCount = 2;
-        const posCounts = tags.reduce((acc, { tag }) => {
-            acc[tag] = (acc[tag] || 0) + 1;
-            return acc;
-        }, {});
-        const filteredPosCounts = Object.entries(posCounts).filter(([tag, count]) => count >= minCount);
-        filteredPosCounts.sort((a, b) => b[1] - a[1]);
-        const top3PosTags = filteredPosCounts.slice(0, 3);
-        const format = top3PosTags.map(([tag, count]) => {
-            return ` "${tag}": ${count} times`;
-        });
-        const t = document.getElementById('pos-val');
-        t.innerHTML = format;
-    }
-
-    const pStatistic = (sentence) => {
-        uniqueWords(sentence);
-        totalWords(sentence);
-        uniqueRatioWords(sentence);
-        NWIWords(sentence);
-        syllableCountWords(sentence);
-        characterCountWords(sentence);
-        top3PosWords(pos(sentence));
-        top3Words(sentence);
-    }
-
-    const tracks = arrayOf(data, 'track');
-    const words = textOf(arrayOf(data, 'text'));
-
-    evolutionWords(data);
-
-    pStatistic(words);
-    pWords(words);
-    pTracks(tracks);
-}
-
-function loaderFor(element) {
-    element.innerText = '...';
-}
-
-function hide(element) {
-    element.style.display = "none";
-}
-
-function show(element) {
-    element.style.display = "block";
-}
-
-function sortBy(array, order) {
-    if (order === 'ascending' || order === 'asc' || order === 0) {
-        array.sort((a, b) => a[1] - b[1]);
-    } else if (order === 'descending' || order === 'desc' || order === 1) {
-        array.sort((a, b) => b[1] - a[1]);
-    }
-    return array;
-}
-
-function lastModification() {
-    const modification = document.getElementById('modification');
-    const date = new Date(document.lastModified).toLocaleDateString();
-    modification.innerText = `Last modified date ${date}`;
+    draw();
 }
 
 function version() {
-    const versionEl = document.getElementById('version');
-    versionEl.innerText = `v${vrsn}`;
+    setText('version', `v${vrsn}`);
 }
 
 function mixWords() {
-    const text = document.getElementById('text');
-    const innerText = text.innerText;
-    const mixed = mix(innerText);
-    text.innerText = mixed;
+    const text = byId('text');
+    text.textContent = mix(text.textContent);
 }
 
 function openDialogBy(id) {
-    const dialog = document.getElementById(id);
-    dialog.showModal();
+    byId(id).showModal();
 }
 
+/** Rhyme patterns per track (experimental, not displayed yet). */
 function trackRhymes(tracks) {
     const stats = {};
-    let lyrics = arrayOf(tracks, 'text');
-    for (const line of lyrics) {
-        const words = wordsOf(line);
-        const beats = rhymes(words);
+    for (const line of arrayOf(tracks, 'text')) {
+        const beats = rhymes(wordsOf(line));
         for (const group in beats) {
             if (beats[group].length > 1) {
-                const pattern = `${group.repeat(beats[group].length)}`;
-                if (!stats[pattern]) {
-                    stats[pattern] = 0;
-                }
-                stats[pattern]++;
+                const pattern = group.repeat(beats[group].length);
+                stats[pattern] = (stats[pattern] || 0) + 1;
             }
         }
     }

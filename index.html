@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-US" xml:lang="en-US" itemscope="" itemtype="http://schema.org/WebSite">
+<html lang="en-US" itemscope="" itemtype="http://schema.org/WebSite">
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Statistics of words in Eminem songs">
@@ -7,17 +7,21 @@
     music words, vocabulary">
     <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
     <meta name="author" content="Ihor Vysotskyi">
-    <link rel="icon" type="image/x-icon" href="public/logo/logo32.png">
-    <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="brabbit">
-    <link rel="alternate" type="application/rss+xml" title="RSS for brabbit.com" href="https://www.brabbit.com/rss.xml">
-    <link rel="canonical" href="https://www.brabbit.com/">
+    <meta name="color-scheme" content="light dark">
+    <meta property="og:title" content="brabbit">
+    <meta property="og:description" content="Statistics of words in Eminem songs">
+    <meta property="og:type" content="website">
+    <link rel="icon" type="image/png" sizes="16x16" href="public/logo/logo16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="public/logo/logo32.png">
+    <link rel="apple-touch-icon" href="public/logo/logo128.png">
+    <link rel="canonical" href="https://ig-v-k.github.io/brabbit/">
     <link rel="stylesheet" type="text/css" href="public/css/main.css"/>
     <title>brabbit</title>
-    <script src="public/js/main.js"></script>
-    <script src="public/js/utils.js"></script>
-    <script src="public/data.js"></script>
+    <script src="public/js/utils.js" defer></script>
+    <script src="public/data.js" defer></script>
+    <script src="public/js/main.js" defer></script>
 </head>
-<body onload="onLoad()">
+<body>
     <dialog id="findWordDialog">
         <p>Please press <kbd>Ctrl</kbd> + <kbd>F</kbd> and type word.</p>
         <form method="dialog">
@@ -26,12 +30,17 @@
     </dialog>
 
     <header>
-        <img src="public/logo/logo32.png" alt="Logo">
+        <img src="public/logo/logo32.png" alt="Logo" width="32" height="32">
         <p><b>brabbit</b> - Statistics of words in Eminem songs</p>
         <h1>Eminem</h1>
     </header>
     <main>
         <div id="container">
+            <label for="album"><b>Album</b>:</label>
+            <select id="album">
+                <option value="">All tracks</option>
+            </select>
+            <p id="summary" aria-live="polite">load...</p>
             <ul id="statistic">
                 <li><span id="unique"><b>Unique</b>: <span id="unique-val">load...</span></span></li>
                 <li><span id="total"><b>Total</b>: <span id="total-val">load...</span></span></li>
@@ -39,21 +48,31 @@
                     <b>Unique ratio<sup><a href="#uniqueRatio-ref">[1]</a></sup></b>:
                     <span id="uniqueRatio-val">load...</span></span>
                 </li>
-                <li><span id="nwi"><b>NWI<sup><a href="#nwi-ref">[2]</a></sup></b>: <span id="nwi-val">load...</span></span></li>
-                <li><span id="evolution"><b>Evolution over Time<sup><a href="#evolution-ref">[3]</a></sup></b>: <span id="evolution-val">load...</span></span></li>
+                <li><span id="mattr"><b>MATTR<sup><a href="#mattr-ref">[2]</a></sup></b>: <span id="mattr-val">load...</span></span></li>
+                <li><span id="nwi"><b>NWI<sup><a href="#nwi-ref">[3]</a></sup></b>: <span id="nwi-val">load...</span></span></li>
+                <li><span id="repeat"><b>Repeat interval<sup><a href="#repeat-ref">[4]</a></sup></b>: <span id="repeat-val">load...</span></span></li>
+                <li><span id="hapax"><b>Hapax legomena<sup><a href="#hapax-ref">[5]</a></sup></b>: <span id="hapax-val">load...</span></span></li>
+                <li><span id="evolution"><b>Evolution over Time<sup><a href="#evolution-ref">[6]</a></sup></b>: <span id="evolution-val">load...</span></span></li>
                 <li><span id="syllables">
-                    <b>Syllable<sup><a href="#syllable-ref">[4]</a></sup></b>:
+                    <b>Syllable<sup><a href="#syllable-ref">[7]</a></sup></b>:
                     <span id="syllables-val">load...</span></span>
                 </li>
-                <li><span id="character"><b>Character<sup><a href="#character-ref">[5]</a></sup></b>:
+                <li><span id="character"><b>Character<sup><a href="#character-ref">[8]</a></sup></b>:
                     <span id="character-val">load...</span></span>
                 </li>
-                <li><span id="pos"><b>POS<sup><a href="#pos-ref">[6]</a></sup></b>: <span id="pos-val">load...</span></span></li>
+                <li><span id="pos"><b>POS<sup><a href="#pos-ref">[9]</a></sup></b>: <span id="pos-val">load...</span></span></li>
+                <li><span id="lexical"><b>Lexical density<sup><a href="#lexical-ref">[10]</a></sup></b>: <span id="lexical-val">load...</span></span></li>
+                <li><span id="pronoun"><b>Pronoun focus<sup><a href="#pronoun-ref">[11]</a></sup></b>: <span id="pronoun-val">load...</span></span></li>
                 <li><span id="top3"><b>Top3 word</b>: <span id="top3-val">load...</span></span></li>
+                <li><span id="top5content"><b>Top5 content word</b>: <span id="top5content-val">load...</span></span></li>
             </ul>
+            <h3>Tracks</h3>
+            <div class="table-wrap">
+                <table id="tracks-table"></table>
+            </div>
             <div>
-                <button onclick="mixWords();">Mix</button>
-                <button onClick="openDialogBy('findWordDialog');">Find word</button>
+                <button type="button" onclick="mixWords();">Mix</button>
+                <button type="button" onclick="openDialogBy('findWordDialog');">Find word</button>
             </div>
             <small><i id="text">load...</i></small>
             <p id="tracks">load...</p>
@@ -62,25 +81,42 @@
         <ol id="references">
             <li id="uniqueRatio-ref">
                 <a href="#uniqueRatio" aria-label="Back to text" title="Back to text">↑</a>
-                <span><b>Unique Words vs. Total Words</b>: This classic statistic shows the ratio of unique words used to the
-                    total number of words in Eminem's discography (or a specific album). This can be compared to other
-                    rappers or artists to see his vocabulary richness.</span>
+                <span><b>Unique Words vs. Total Words</b>: This classic statistic (type-token ratio) shows the ratio of
+                    unique words used to the total number of words in Eminem's discography (or a specific album). It
+                    always drops for longer texts, so compare only selections of similar size, otherwise use MATTR.</span>
+            </li>
+            <li id="mattr-ref">
+                <a href="#mattr" aria-label="Back to text" title="Back to text">↑</a>
+                <span><b>Moving-Average Type-Token Ratio (MATTR)</b>: The unique ratio measured in every window of 100
+                    consecutive words and averaged. It doesn't depend on text length, so a short track, a whole album
+                    and the full discography can be compared directly. Higher means richer vocabulary.</span>
             </li>
             <li id="nwi-ref">
                 <a href="#nwi" aria-label="Back to text" title="Back to text">↑</a>
                 <span><b>New Word Interval (NWI)</b>: The frequency of new words. Similar
-                    to the stat achieved by Guinness World Records it the average number of words between each
-                    unique word Eminem uses. A lower NWI indicates a denser vocabulary usage.</span>
+                    to the stat achieved by Guinness World Records it is the average number of words between each
+                    unique word Eminem uses (total / unique). A lower NWI indicates a denser vocabulary usage.</span>
+            </li>
+            <li id="repeat-ref">
+                <a href="#repeat" aria-label="Back to text" title="Back to text">↑</a>
+                <span><b>Repeat Interval</b>: The average distance, in words, between two uses of the same word.
+                    Choruses and hooks pull it down, long verses with rare words push it up.</span>
+            </li>
+            <li id="hapax-ref">
+                <a href="#hapax" aria-label="Back to text" title="Back to text">↑</a>
+                <span><b>Hapax Legomena</b>: Words that occur only once in the selection. A large share of
+                    one-time words means the vocabulary is wide rather than built on repetition.</span>
             </li>
             <li id="evolution-ref">
                 <a href="#evolution" aria-label="Back to text" title="Back to text">↑</a>
-                <span><b>Evolution over Time</b>: The changes in Eminem's vocabulary statistics over his career.
-                    Did his NWI decrease, indicating a more diverse vocabulary, or has it remained consistent.</span>
+                <span><b>Evolution over Time</b>: The changes in Eminem's vocabulary over his career: the linear trend
+                    of per-track MATTR by release year, in percentage points per decade, with the correlation
+                    coefficient r (how well the trend explains the data, from -1 to 1) and MATTR of each year.</span>
             </li>
             <li id="syllable-ref">
-                <a href="#syllable" aria-label="Back to text" title="Back to text">↑</a>
-                <span><b>Syllable Count</b>: The distribution of words by syllable count. Does Eminem favor short,
-                    punchy words for emphasis, or use a wider range for flow and complexity.</span>
+                <a href="#syllables" aria-label="Back to text" title="Back to text">↑</a>
+                <span><b>Syllable Count</b>: The distribution of words by syllable count (estimated from vowel groups).
+                    Does Eminem favor short, punchy words for emphasis, or use a wider range for flow and complexity.</span>
             </li>
             <li id="character-ref">
                 <a href="#character" aria-label="Back to text" title="Back to text">↑</a>
@@ -89,9 +125,22 @@
             </li>
             <li id="pos-ref">
                 <a href="#pos" aria-label="Back to text" title="Back to text">↑</a>
-                <span><b>Part-of-Speech Analysis</b>: The distribution of parts of speech (nouns, verbs,
-                    adjectives etc.) This can show lyrical style, focus on storytelling vs. emotions, or aggressiveness
-                    vs. introspection.</span>
+                <span><b>Part-of-Speech Analysis</b>: The distribution of parts of speech (pronouns, verbs,
+                    prepositions etc.), based on word lists. Words outside the lists are counted as "other" (mostly
+                    nouns and adjectives). This can show lyrical style, focus on storytelling vs. emotions, or
+                    aggressiveness vs. introspection.</span>
+            </li>
+            <li id="lexical-ref">
+                <a href="#lexical" aria-label="Back to text" title="Back to text">↑</a>
+                <span><b>Lexical Density</b>: The share of content words (nouns, verbs, adjectives, adverbs) among all
+                    words, as opposed to function words like "the", "and", "you", "is". Dense lyrics carry more
+                    information per line.</span>
+            </li>
+            <li id="pronoun-ref">
+                <a href="#pronoun" aria-label="Back to text" title="Back to text">↑</a>
+                <span><b>Pronoun Focus</b>: First person ("I", "me", "my", "I'm"...) against second person ("you",
+                    "your", "ya"...). A high ratio points to introspection and self-narration, a low one to
+                    addressing someone: a lover, a hater, the listener.</span>
             </li>
         </ol>
     </main>
